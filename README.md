@@ -1,62 +1,85 @@
-# Custom Port Scanner
+# 🔒 Custom Port Scanner with Service Detection
+**Socket Programming – Jackfruit Mini Project**
 
-A tool for scanning ports on a target host to assess whether they are open or closed.
+## 📋 Table of Contents
+1. [Problem Definition](#1-problem-definition)
+2. [Architecture](#2-architecture)
+3. [Core Implementation](#3-core-implementation)
+4. [Features](#4-features)
+5. [Performance Evaluation](#5-performance-evaluation)
+6. [Optimization & Bug Fixes](#6-optimization--bug-fixes)
+7. [Setup Instructions](#setup-instructions)
+8. [Usage Guide](#usage-guide)
+9. [Technical Documentation](#technical-documentation)
+10. [Evaluation Criteria Mapping](#evaluation-criteria-mapping)
 
-## Table of Contents
-1. [Introduction](#introduction)
-2. [Features](#features)
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Architecture](#architecture)
-6. [Contributing](#contributing)
-7. [License](#license)
+---
 
-## Introduction
-This Custom Port Scanner allows users to detect open ports on a host system, helping in network security assessments.
+## 1. Problem Definition
 
-## Features
-- Fast and efficient scanning
-- Supports both TCP and UDP protocols
-- Customizable scan options
+### Objective
+Design and implement a **secure, high-performance network scanner** using low-level socket programming that demonstrates:
 
-## Installation
-To install the Custom Port Scanner, clone the repository and install the necessary dependencies:
+✅ **Explicit Socket Operations**
+- Manual socket creation, binding, and connection management
+- Direct TCP/UDP handshake implementation
+- Explicit resource cleanup and error handling
 
-```bash
-git clone https://github.com/aniketrj45/Custom-Port-Scanner.git
-cd Custom-Port-Scanner
-# install dependencies
-```
+✅ **Multi-Threaded Concurrency**
+- Support for 100+ concurrent worker threads
+- ThreadPoolExecutor-based thread pool management
+- Efficient connection pooling
 
-## Usage
-To use the Port Scanner, run the following command:
+✅ **Service Identification**
+- Banner grabbing to identify running services (FTP, SSH, HTTP, etc.)
+- Protocol-specific payload handling
 
-```bash
-python port_scanner.py [TARGET] [OPTIONS]
-```
+✅ **SSL/TLS Secure Communication (Mandatory)**
+- Implements `ssl.create_default_context()` for secure connections
+- TLS wrapping for HTTPS service detection (port 443)
+- Secure data exchange for all communications
 
-Replace `[TARGET]` with the target IP or hostname and adjust `[OPTIONS]` as needed.
+---
 
-## Architecture
+## 2. Architecture
 
+### System Design
 ```plaintext
-          +-------------------+
-          |    User Input     |
-          +-------------------+
-                    |
-                    v
-          +-------------------+
-          |  Port Scanning    |
-          +-------------------+
-                    |
-                    v
-          +-------------------+
-          |  Results Display   |
-          +-------------------+
-```
-
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for changes.
-
-## License
-This project is licensed under the MIT License.
+┌─────────────────────────────────────────────────────────────┐
+│                        User Interface                        │
+│           (CLI: target IP, port range, options)              │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│                  DNS Resolution Module                       │
+│        Resolves hostname to IP addresses using socket        │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│              Concurrency Engine (ThreadPool)                 │
+│          ThreadPoolExecutor: 100+ worker threads             │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+        ┌─────────────┴──────────────────┐
+        │                                │
+   ┌────▼─────────┐             ┌────────▼──────┐
+   │ TCP Probing  │             │ UDP Probing    │
+   │   Module     │             │   Module       │
+   └────┬─────────┘             └────────┬───────┘
+        │                                │
+        └─────────────┬──────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│         Port Status Detection (Open/Closed/Filtered)         │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│        Banner Grabbing & Service Detection                   │
+│   SSL/TLS Connection: ssl.create_default_context()           │
+│   Service Identification via protocol handshakes             │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│              Results & Reporting Module                      │
+│     (Console output, JSON export, detailed logging)          │
+└─────────────────────────────────────────────────────────────┘
