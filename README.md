@@ -1,78 +1,62 @@
-Custom Port Scanner with Service Detection
-Socket Programming - Jackfruit Mini Project
+# Custom Port Scanner
 
-1. Problem Definition
-The objective of this project is to implement a secure, high-performance network scanner using low-level TCP socket programming. Unlike high-level tools, this "Custom" scanner demonstrates:
-+1
+A tool for scanning ports on a target host to assess whether they are open or closed.
 
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Installation](#installation)
+4. [Usage](#usage)
+5. [Architecture](#architecture)
+6. [Contributing](#contributing)
+7. [License](#license)
 
-Manual Connection Handling: Explicit socket creation, binding, and connection management.
+## Introduction
+This Custom Port Scanner allows users to detect open ports on a host system, helping in network security assessments.
 
+## Features
+- Fast and efficient scanning
+- Supports both TCP and UDP protocols
+- Customizable scan options
 
-Concurrency: Scanning multiple ports simultaneously using a thread pool.
-+1
+## Installation
+To install the Custom Port Scanner, clone the repository and install the necessary dependencies:
 
-Service Identification: Using "Banner Grabbing" to identify running software.
+```bash
+git clone https://github.com/aniketrj45/Custom-Port-Scanner.git
+cd Custom-Port-Scanner
+# install dependencies
+```
 
+## Usage
+To use the Port Scanner, run the following command:
 
-Security: SSL/TLS implementation for secure data exchange.
+```bash
+python port_scanner.py [TARGET] [OPTIONS]
+```
 
-2. Architecture
-The system follows a Multi-Threaded Client-Server architecture:
+Replace `[TARGET]` with the target IP or hostname and adjust `[OPTIONS]` as needed.
 
-Target Resolution: Resolves hostnames to IP addresses using DNS.
+## Architecture
 
+```plaintext
+          +-------------------+
+          |    User Input     |
+          +-------------------+
+                    |
+                    v
+          +-------------------+
+          |  Port Scanning    |
+          +-------------------+
+                    |
+                    v
+          +-------------------+
+          |  Results Display   |
+          +-------------------+
+```
 
-Concurrency Engine: Utilizes ThreadPoolExecutor to manage 100+ concurrent worker threads.
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for changes.
 
-TCP Probing: Each worker performs a TCP Three-Way Handshake with a specific port.
-
-
-Banner Grabbing & SSL: If a port is open, the scanner establishes an SSL/TLS wrapped connection to safely retrieve the service banner.
-
-3. Features
-Full TCP Scan: Detects open/closed ports using low-level sockets.
-
-Service Detection: Banner grabbing to identify FTP, SSH, HTTP, etc..
-
-Robustness: Includes built-in timeout and retry logic to handle unstable network conditions.
-
-
-Secure Communication: Implements SSL/TLS for mandatory secure control exchanges.
-
-4. Setup & Usage
-Prerequisites
-Python 3.x
-
-Git
-
-Installation
-Bash
-git clone https://github.com/[your-username]/jackfruit-port-scanner.git
-cd jackfruit-port-scanner
-Usage
-Bash
-python scanner.py
-5. Performance Evaluation
-The application measures performance under realistic conditions with multiple concurrent threads.
-
-
-Metrics Tracked: Total time elapsed, throughput (Ports/Second), and scalability under high thread counts.
-
-
-Efficiency: Demonstrates reduced latency compared to sequential scanning methods.
-
-6. Optimization & Bug Fixes
-
-Abrupt Disconnections: Handled using explicit socket close() and exception blocks.
-
-
-SSL Failures: Graceful handling of handshake failures during banner grabbing.
-
-
-Edge Cases: Validates user input for port ranges and IP formats.
-
-Pro-Tip for your Demo:
-Your rubric emphasizes SSL/TLS-based secure communication is mandatory. Even for a port scanner, you should mention in your README that you use ssl.create_default_context() when grabbing banners from secure ports (like 443) to satisfy this requirement.
-
-Would you like me to help you create the Architecture Diagram mentioned in the rubric?
+## License
+This project is licensed under the MIT License.
