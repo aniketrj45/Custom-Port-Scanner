@@ -21,8 +21,7 @@
 8. [Usage Guide](#8-usage-guide)
 9. [Technical Documentation](#9-technical-documentation)
 10. [Evaluation Criteria Mapping](#10-evaluation-criteria-mapping)
-11. [Contributing](#contributing)
-12. [License](#license)
+11. [License](#license)
 
 ---
 
